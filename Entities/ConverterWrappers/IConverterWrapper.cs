@@ -19,5 +19,9 @@ namespace SuperFileConverter.ConverterWrappers
         Uri OutputFile { get; set; }
 
         List<string> RunCommand(string args, bool redirect);
+
+        string ParseSettings();
+
+        List<string> RunCommandFromSettings(bool redirect);
     }
 }

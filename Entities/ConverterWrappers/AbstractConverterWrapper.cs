@@ -8,7 +8,7 @@ using System.IO;
 
 namespace SuperFileConverter.ConverterWrappers
 {
-    abstract class AbstractConverterWrapper:IConverterWrapper
+    public abstract class AbstractConverterWrapper:IConverterWrapper
     {
         public string Name { get; protected set; }
 
@@ -20,6 +20,18 @@ namespace SuperFileConverter.ConverterWrappers
 
         public Uri OutputFile { get; set; }
 
+        abstract public string ParseSettings();
+
+        public string GetCommandFromSettings()
+        {
+            return string.Format("{0} {1}", this.ExePath.LocalPath, this.ParseSettings());
+        }
+
+        public List<string> RunCommandFromSettings(bool redirect = false)
+        {
+            return this.RunCommand(this.ParseSettings(), redirect);
+        }
+
         public List<string> RunCommand(string args, bool redirect = false)
         {
             var ret = new List<string>();
@@ -30,6 +42,7 @@ namespace SuperFileConverter.ConverterWrappers
                 Arguments = args,
                 UseShellExecute = false,
                 RedirectStandardOutput = redirect,
+                RedirectStandardError = true,
                 CreateNoWindow = false
             };
 
@@ -43,6 +56,11 @@ namespace SuperFileConverter.ConverterWrappers
                 {
                     ret.Add(proc.StandardOutput.ReadLine());
                 }
+            }
+
+            while (!proc.StandardError.EndOfStream)
+            {
+                System.Diagnostics.Debug.WriteLine(proc.StandardError.ReadLine());
             }
 
             return ret;
