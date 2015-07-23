@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SuperFileConverter.Entities.Settings;
 
-namespace SuperFileConverter.ConverterWrappers
+namespace SuperFileConverter.Entities.ConverterWrappers
 {
-    public class Gifsicle : AbstractConverterWrapper, IScale, IDistinctColors, IOptimize
+    public class Gifsicle : AbstractConverterWrapper, IScale, IDistinctColors, IOptimize, ICrop
     {
         public Gifsicle()
         {
@@ -19,6 +19,25 @@ namespace SuperFileConverter.ConverterWrappers
         public override string ParseSettings()
         {
             StringBuilder args = new StringBuilder();
+
+            if (CropX1 != null && CropY1 != null)
+            {
+                if (CropX2 != null && CropY2 != null)
+                {
+                    if (CropMode == 1)
+                    {
+                        args.AppendFormat(" --crop {0},{1}-{2},{3}", CropX1, CropY1, CropX2, CropY2);
+                    }
+                    else
+                    {
+                        args.AppendFormat(" --crop {0},{1}+{2}x{3}", CropX1, CropY1, CropX2, CropY2);
+                    }
+                }
+                else
+                {
+                    args.AppendFormat(" --crop {0}x{1}", CropX1, CropY1);
+                }
+            }
 
             if (InputFile != null)
             {
@@ -67,9 +86,26 @@ namespace SuperFileConverter.ConverterWrappers
         }
 
         public double? Scale { get; set; }
-        
+
         public int? DistinctColors { get; set; }
 
         public int? OptimizeLevel { get; set; }
+
+        public int? CropX1 { get; set; }
+
+        public int? CropY1 { get; set; }
+
+        public int? CropX2 { get; set; }
+
+        public int? CropY2 { get; set; }
+
+        public int? CropMode { get; set; }
+
+        public override List<string> AvailableSettings
+        {
+            get {
+                return new List<string> { "Scale", "DistinctColors", "Optimize", "Crop" };
+            }
+        }
     }
 }

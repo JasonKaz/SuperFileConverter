@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 
-namespace SuperFileConverter.ConverterWrappers
+namespace SuperFileConverter.Entities.ConverterWrappers
 {
     public abstract class AbstractConverterWrapper:IConverterWrapper
     {
@@ -21,6 +21,8 @@ namespace SuperFileConverter.ConverterWrappers
         public Uri OutputFile { get; set; }
 
         abstract public string ParseSettings();
+
+        abstract public List<string> AvailableSettings { get; }
 
         public string GetCommandFromSettings()
         {

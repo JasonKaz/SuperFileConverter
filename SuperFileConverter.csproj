@@ -45,8 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\ConverterWrappers\AbstractConverterWrapper.cs" />
+    <Compile Include="Entities\ConverterWrappers\FFmpeg.cs" />
     <Compile Include="Entities\ConverterWrappers\Gifsicle.cs" />
     <Compile Include="Entities\ConverterWrappers\IConverterWrapper.cs" />
+    <Compile Include="Entities\ConverterWrappers\ImageMagick.cs" />
+    <Compile Include="Entities\Settings\ICrop.cs" />
     <Compile Include="Entities\Settings\IDistinctColors.cs" />
     <Compile Include="Entities\Settings\IOptimize.cs" />
     <Compile Include="Entities\Settings\IScale.cs" />
