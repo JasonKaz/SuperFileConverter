@@ -19,5 +19,11 @@ namespace SuperFileConverter.Entities.ConverterWrappers
         Uri OutputFile { get; set; }
 
         string ParseSettings();
+
+        List<string> AvailableSettings { get; }
+
+        List<string> AllowedInputTypes { get; }
+
+        List<string> AllowedOutputTypes { get; }
     }
 }

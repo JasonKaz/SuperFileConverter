@@ -34,6 +34,12 @@ namespace SuperFileConverter
 
         public FFmpeg FFmpegConverter;
 
+        public List<string> OutputFileTypes = new List<string> { "All|*.*" };
+
+        public List<string> InputFileTypes = new List<string> { "All|*.*" };
+
+        public AbstractConverterWrapper SelectedConverter = null;
+
         string GetRelativePath(string filespec, string folder)
         {
             Uri pathUri = new Uri(filespec);
@@ -48,11 +54,11 @@ namespace SuperFileConverter
 
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
-            dlgChooseFile.Filter = "GIF|*.gif";
+            dlgChooseFile.Filter = string.Join("|", InputFileTypes);
 
             if (dlgChooseFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                GifsicleConverter.InputFile = new Uri(dlgChooseFile.FileName);
+                SelectedConverter.InputFile = new Uri(dlgChooseFile.FileName);
             }
         }
 
@@ -125,51 +131,54 @@ namespace SuperFileConverter
         {
             HandleSettings();
 
-            GifsicleConverter.RunCommandFromSettings();
+            SelectedConverter.RunCommandFromSettings();
         }
 
         private void cbGetCommand_Click(object sender, EventArgs e)
         {
             HandleSettings();
 
-            MessageBox.Show(GifsicleConverter.GetCommandFromSettings());
+            MessageBox.Show(SelectedConverter.GetCommandFromSettings());
         }
 
         private void btnOutput_Click(object sender, EventArgs e)
         {
+            dlgOutput.Filter = string.Join("|", OutputFileTypes);
+
             if (dlgOutput.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                GifsicleConverter.OutputFile = new Uri(dlgOutput.FileName);
+                SelectedConverter.OutputFile = new Uri(dlgOutput.FileName);
             }
         }
 
         private void ddlConverter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AbstractConverterWrapper converter = null;
-
             if (!string.IsNullOrEmpty(ddlConverter.SelectedItem.ToString()))
             {
                 switch (ddlConverter.SelectedItem.ToString())
                 {
                     case "Gifsicle":
-                        converter = GifsicleConverter;
+                        SelectedConverter = GifsicleConverter;
                         break;
 
                     case "ImageMagick":
-                        converter = ImageMagickConverter;
+                        SelectedConverter = ImageMagickConverter;
                         break;
 
                     case "FFmpeg":
-                        converter = FFmpegConverter;
+                        SelectedConverter = FFmpegConverter;
                         break;
                 }
 
-                if (converter != null)
+                InputFileTypes = SelectedConverter.AllowedInputTypes.Select(x => x.ToUpper() + "|*." + x).ToList();
+                OutputFileTypes = SelectedConverter.AllowedOutputTypes.Select(x => x.ToUpper() + "|*." + x).ToList();
+
+                if (SelectedConverter != null)
                 {
-                    cbScale.Enabled = numScale.Enabled = converter.AvailableSettings.Contains("Scale");
-                    cbDistinctColors.Enabled = numDistinctColors.Enabled = converter.AvailableSettings.Contains("DistinctColors");
-                    cbOptimization.Enabled = numOptimizeLevel.Enabled = converter.AvailableSettings.Contains("Optimize");
-                    cbCrop.Enabled = tbCropX1.Enabled = tbCropY1.Enabled = rbCropBy.Enabled = rbCropTo.Enabled = tbCropX2.Enabled = tbCropY2.Enabled = converter.AvailableSettings.Contains("Crop");
+                    cbScale.Enabled = numScale.Enabled = SelectedConverter.AvailableSettings.Contains("Scale");
+                    cbDistinctColors.Enabled = numDistinctColors.Enabled = SelectedConverter.AvailableSettings.Contains("DistinctColors");
+                    cbOptimization.Enabled = numOptimizeLevel.Enabled = SelectedConverter.AvailableSettings.Contains("Optimize");
+                    cbCrop.Enabled = tbCropX1.Enabled = tbCropY1.Enabled = rbCropBy.Enabled = rbCropTo.Enabled = tbCropX2.Enabled = tbCropY2.Enabled = SelectedConverter.AvailableSettings.Contains("Crop");
                 }
             }
         }

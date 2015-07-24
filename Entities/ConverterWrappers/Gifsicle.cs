@@ -103,9 +103,23 @@ namespace SuperFileConverter.Entities.ConverterWrappers
 
         public override List<string> AvailableSettings
         {
-            get {
+            get
+            {
                 return new List<string> { "Scale", "DistinctColors", "Optimize", "Crop" };
             }
+        }
+
+        public override List<string> AllowedInputTypes
+        {
+            get
+            {
+                return new List<string> { "gif" };
+            }
+        }
+
+        public override List<string> AllowedOutputTypes
+        {
+            get { return new List<string> { "gif" }; }
         }
     }
 }

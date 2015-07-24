@@ -20,9 +20,13 @@ namespace SuperFileConverter.Entities.ConverterWrappers
 
         public Uri OutputFile { get; set; }
 
-        abstract public string ParseSettings();
+        public abstract string ParseSettings();
 
-        abstract public List<string> AvailableSettings { get; }
+        public abstract List<string> AvailableSettings { get; }
+
+        public abstract List<string> AllowedInputTypes { get; }
+
+        public abstract List<string> AllowedOutputTypes { get; }
 
         public string GetCommandFromSettings()
         {

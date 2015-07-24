@@ -17,5 +17,15 @@ namespace SuperFileConverter.Entities.ConverterWrappers
         {
             get { return new List<string> { }; }
         }
+
+        public override List<string> AllowedInputTypes
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override List<string> AllowedOutputTypes
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
