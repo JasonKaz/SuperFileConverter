@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SuperFileConverter.Entities.Settings;
 
 namespace SuperFileConverter.Entities.ConverterWrappers
 {
-    public class ImageMagick : AbstractConverterWrapper
+    public class ImageMagick : AbstractConverterWrapper, IScale, IDistinctColors
     {
         public ImageMagick()
         {
@@ -24,17 +25,22 @@ namespace SuperFileConverter.Entities.ConverterWrappers
                 args.AppendFormat(" {0}", InputFile.LocalPath);
             }
 
+            if (Scale != null)
+            {
+                args.AppendFormat(" -resize {0}", Utils.DecimalToPercent(Scale));
+            }
+
+            if (DistinctColors != null)
+            {
+                args.AppendFormat(" -colors {0}", DistinctColors);
+            }
+
             if (OutputFile != null)
             {
                 args.AppendFormat(" {0}", OutputFile.LocalPath);
             }
 
             return args.ToString();
-        }
-
-        public override List<string> AvailableSettings
-        {
-            get { return new List<string> { }; }
         }
 
         public override List<string> AllowedInputTypes
@@ -52,5 +58,9 @@ namespace SuperFileConverter.Entities.ConverterWrappers
                 return new List<string> { "png", "jpg" };
             }
         }
+
+        public double? Scale { get; set; }
+
+        public int? DistinctColors { get; set; }
     }
 }

@@ -13,11 +13,6 @@ namespace SuperFileConverter.Entities.ConverterWrappers
             throw new NotImplementedException();
         }
 
-        public override List<string> AvailableSettings
-        {
-            get { return new List<string> { }; }
-        }
-
         public override List<string> AllowedInputTypes
         {
             get { throw new NotImplementedException(); }

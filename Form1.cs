@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 
 using SuperFileConverter.Entities.ConverterWrappers;
+using SuperFileConverter.Entities.Settings;
 
 namespace SuperFileConverter
 {
@@ -62,68 +63,90 @@ namespace SuperFileConverter
             }
         }
 
+        private void HandleInterface<T>(Action<T> action) where T : class
+        {
+            T inter = SelectedConverter as T;
+
+            if (inter != null)
+            {
+                action(inter);
+            }
+        }
+
         private void HandleSettings()
         {
             if (cbScale.Checked)
             {
-                double val = 0.0;
+                HandleInterface<IScale>(x =>
+                {
+                    double val = 0.0;
 
-                double.TryParse(numScale.Value.ToString(), out val);
+                    double.TryParse(numScale.Value.ToString(), out val);
 
-                GifsicleConverter.Scale = val;
+                    x.Scale = val;
+                });
             }
 
             if (cbDistinctColors.Checked)
             {
-                int val = 0;
+                HandleInterface<IDistinctColors>(x =>
+                {
+                    int val = 0;
 
-                int.TryParse(numDistinctColors.Value.ToString(), out val);
+                    int.TryParse(numDistinctColors.Value.ToString(), out val);
 
-                GifsicleConverter.DistinctColors = val;
+                    x.DistinctColors = val;
+                });
             }
 
             if (cbOptimization.Checked)
             {
-                int val = 0;
+                HandleInterface<IOptimize>(x =>
+                {
+                    int val = 0;
 
-                int.TryParse(numOptimizeLevel.Value.ToString(), out val);
+                    int.TryParse(numOptimizeLevel.Value.ToString(), out val);
 
-                GifsicleConverter.OptimizeLevel = val;
+                    x.OptimizeLevel = val;
+                });
             }
 
             if (cbCrop.Checked)
             {
-                int x1, y1, x2, y2;
-
-                int.TryParse(tbCropX1.Text, out x1);
-                int.TryParse(tbCropY1.Text, out y1);
-
-                GifsicleConverter.CropX1 = x1;
-                GifsicleConverter.CropY1 = y1;
-
-                if (!string.IsNullOrEmpty(tbCropX2.Text))
+                HandleInterface<ICrop>(x =>
                 {
-                    int.TryParse(tbCropX2.Text, out x2);
+                    int x1, y1, x2, y2;
 
-                    GifsicleConverter.CropX2 = x2;
-                }
+                    int.TryParse(tbCropX1.Text, out x1);
+                    int.TryParse(tbCropY1.Text, out y1);
 
-                if (!string.IsNullOrEmpty(tbCropY2.Text))
-                {
-                    int.TryParse(tbCropY2.Text, out y2);
+                    x.CropX1 = x1;
+                    x.CropY1 = y1;
 
-                    GifsicleConverter.CropY2 = y2;
-                }
+                    if (!string.IsNullOrEmpty(tbCropX2.Text))
+                    {
+                        int.TryParse(tbCropX2.Text, out x2);
 
-                if (rbCropTo.Checked)
-                {
-                    GifsicleConverter.CropMode = 1;
-                }
+                        x.CropX2 = x2;
+                    }
 
-                if (rbCropBy.Checked)
-                {
-                    GifsicleConverter.CropMode = 2;
-                }
+                    if (!string.IsNullOrEmpty(tbCropY2.Text))
+                    {
+                        int.TryParse(tbCropY2.Text, out y2);
+
+                        x.CropY2 = y2;
+                    }
+
+                    if (rbCropTo.Checked)
+                    {
+                        x.CropMode = 1;
+                    }
+
+                    if (rbCropBy.Checked)
+                    {
+                        x.CropMode = 2;
+                    }
+                });
             }
         }
 
@@ -175,10 +198,10 @@ namespace SuperFileConverter
 
                 if (SelectedConverter != null)
                 {
-                    cbScale.Enabled = numScale.Enabled = SelectedConverter.AvailableSettings.Contains("Scale");
-                    cbDistinctColors.Enabled = numDistinctColors.Enabled = SelectedConverter.AvailableSettings.Contains("DistinctColors");
-                    cbOptimization.Enabled = numOptimizeLevel.Enabled = SelectedConverter.AvailableSettings.Contains("Optimize");
-                    cbCrop.Enabled = tbCropX1.Enabled = tbCropY1.Enabled = rbCropBy.Enabled = rbCropTo.Enabled = tbCropX2.Enabled = tbCropY2.Enabled = SelectedConverter.AvailableSettings.Contains("Crop");
+                    cbScale.Enabled = numScale.Enabled = SelectedConverter.SupportsSetting<IScale>();
+                    cbDistinctColors.Enabled = numDistinctColors.Enabled = SelectedConverter.SupportsSetting<IDistinctColors>();
+                    cbOptimization.Enabled = numOptimizeLevel.Enabled = SelectedConverter.SupportsSetting<IOptimize>();
+                    cbCrop.Enabled = tbCropX1.Enabled = tbCropY1.Enabled = rbCropBy.Enabled = rbCropTo.Enabled = tbCropX2.Enabled = tbCropY2.Enabled = SelectedConverter.SupportsSetting<ICrop>();
                 }
             }
         }

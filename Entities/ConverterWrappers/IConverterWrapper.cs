@@ -20,8 +20,6 @@ namespace SuperFileConverter.Entities.ConverterWrappers
 
         string ParseSettings();
 
-        List<string> AvailableSettings { get; }
-
         List<string> AllowedInputTypes { get; }
 
         List<string> AllowedOutputTypes { get; }

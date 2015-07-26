@@ -22,8 +22,6 @@ namespace SuperFileConverter.Entities.ConverterWrappers
 
         public abstract string ParseSettings();
 
-        public abstract List<string> AvailableSettings { get; }
-
         public abstract List<string> AllowedInputTypes { get; }
 
         public abstract List<string> AllowedOutputTypes { get; }
@@ -70,6 +68,13 @@ namespace SuperFileConverter.Entities.ConverterWrappers
             }
 
             return ret;
+        }
+
+        public bool SupportsSetting<T>() where T: class
+        {
+            T inter = this as T;
+
+            return inter != null;
         }
     }
 }

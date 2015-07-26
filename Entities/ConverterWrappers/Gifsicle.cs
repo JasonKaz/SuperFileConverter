@@ -101,14 +101,6 @@ namespace SuperFileConverter.Entities.ConverterWrappers
 
         public int? CropMode { get; set; }
 
-        public override List<string> AvailableSettings
-        {
-            get
-            {
-                return new List<string> { "Scale", "DistinctColors", "Optimize", "Crop" };
-            }
-        }
-
         public override List<string> AllowedInputTypes
         {
             get
