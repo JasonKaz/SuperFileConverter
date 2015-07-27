@@ -7,7 +7,7 @@ using SuperFileConverter.Entities.Settings;
 
 namespace SuperFileConverter.Entities.ConverterWrappers
 {
-    public class ImageMagick : AbstractConverterWrapper, IScale, IDistinctColors
+    public class ImageMagick : AbstractConverterWrapper, IScale, IDistinctColors, ICrop
     {
         public ImageMagick()
         {
@@ -35,6 +35,28 @@ namespace SuperFileConverter.Entities.ConverterWrappers
                 args.AppendFormat(" -colors {0}", DistinctColors);
             }
 
+            if (CropX1 != null && CropY1 != null)
+            {
+                if (CropX2 != null && CropY2 != null)
+                {
+                    if (CropMode == 1)
+                    {
+                        args.AppendFormat(" -crop {0}x{1}+{2}+{3} +repage", CropX1, CropY1, CropX2, CropY2);
+                    }
+                    else
+                    {
+                        int? _cropX2 = CropX1 + CropX2;
+                        int? _cropY2 = CropY1 + CropY2;
+
+                        args.AppendFormat(" -crop {0},{1}+{2}x{3} +repage", CropX1, CropY1, _cropX2, _cropY2);
+                    }
+                }
+                else
+                {
+                    args.AppendFormat(" -crop {0}x{1}+0+0", CropX1, CropY1);
+                }
+            }
+
             if (OutputFile != null)
             {
                 args.AppendFormat(" {0}", OutputFile.LocalPath);
@@ -47,7 +69,7 @@ namespace SuperFileConverter.Entities.ConverterWrappers
         {
             get
             {
-                return new List<string> { "png", "jpg" };
+                return new List<string> { "png", "jpg", "gif" };
             }
         }
 
@@ -55,12 +77,22 @@ namespace SuperFileConverter.Entities.ConverterWrappers
         {
             get
             {
-                return new List<string> { "png", "jpg" };
+                return new List<string> { "png", "jpg", "gif" };
             }
         }
 
         public double? Scale { get; set; }
 
         public int? DistinctColors { get; set; }
+
+        public int? CropX1 { get; set; }
+
+        public int? CropY1 { get; set; }
+
+        public int? CropX2 { get; set; }
+
+        public int? CropY2 { get; set; }
+
+        public int? CropMode { get; set; }
     }
 }

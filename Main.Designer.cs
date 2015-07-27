@@ -1,6 +1,6 @@
 ﻿namespace SuperFileConverter
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -308,7 +308,7 @@
             this.ddlConverter.TabIndex = 5;
             this.ddlConverter.SelectedIndexChanged += new System.EventHandler(this.ddlConverter_SelectedIndexChanged);
             // 
-            // Form1
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -319,8 +319,8 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnConvert);
             this.Controls.Add(this.btnChooseFile);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Main";
+            this.Text = "Super File Converter";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numOptimizeLevel)).EndInit();

@@ -15,13 +15,14 @@ using SuperFileConverter.Entities.Settings;
 
 namespace SuperFileConverter
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
-        public Form1()
+        public Main()
         {
             InitializeComponent();
 
             GifsicleConverter = new Gifsicle();
+            GifsicleConverter.InputFile= new Uri(Environment.CurrentDirectory + "\\INPUT.gif");
             GifsicleConverter.OutputFile = new Uri(Environment.CurrentDirectory + "\\OUTPUT.gif");
 
             ImageMagickConverter = new ImageMagick();
@@ -40,6 +41,8 @@ namespace SuperFileConverter
         public List<string> InputFileTypes = new List<string> { "All|*.*" };
 
         public AbstractConverterWrapper SelectedConverter = null;
+
+        private CommandView CommandViewDialog = new CommandView();
 
         string GetRelativePath(string filespec, string folder)
         {
@@ -159,9 +162,13 @@ namespace SuperFileConverter
 
         private void cbGetCommand_Click(object sender, EventArgs e)
         {
-            HandleSettings();
+            if (SelectedConverter != null)
+            {
+                HandleSettings();
 
-            MessageBox.Show(SelectedConverter.GetCommandFromSettings());
+                CommandViewDialog.SetCommandText(SelectedConverter.GetCommandFromSettings());
+                CommandViewDialog.ShowDialog();
+            }
         }
 
         private void btnOutput_Click(object sender, EventArgs e)
