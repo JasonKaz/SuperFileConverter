@@ -98,6 +98,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Converters\FFmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Converters\Gifsicle\gifsicle.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
